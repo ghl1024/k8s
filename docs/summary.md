@@ -6,6 +6,7 @@
   * [Docker 联合文件系统](docker/05.unionfs.md)
   * [Docker Dockerfile](docker/06.dockerfile.md)
   * [Docker 核心技术](docker/07.component.md)
+  * [Docker国内镜像加速](docker/08.registry.md)
 
 * Kubernetes 概念
   * [Kubernetes 基础概念及术语](kubernetes/concepts/01.concepts.md)
@@ -41,11 +42,12 @@
   * [CNI方案性能对比](kubernetes/network/07.comparison.md)
 
 * Kubernetes 集群存储
-  * [存储机制概述](kubernetes/configuration.md)
-  * [PV详解](kubernetes/themes.md)
-  * [PVC详解](kubernetes/plugins.md)
-  * [Storageclass详解](kubernetes/write-a-plugin.md)
-  * [CSI存储机制详解](kubernetes/markdown.md)
+  * [PV详解](kubernetes/storage/01.pv.md)
+  * [PVC详解](kubernetes/storage/02.pvc.md)
+  * [PV和PVC的生命周期](kubernetes/storage/03.lifecycle.md)
+  * [Storageclass详解](kubernetes/storage/04.storageclass.md)
+  * [存储卷快照](kubernetes/storage/05.snapshots.md)
+  * [CSI存储机制详解](kubernetes/storage/06.csi.md)
 
 * Kubernetes 资源管理
   * [Node的管理](kubernetes/cluster-admin/01.node.md)

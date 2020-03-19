@@ -14,6 +14,7 @@
 172.16.100.198 hostname=haproxy-01 type=MASTER priority=100
 172.16.100.199 hostname=haproxy-02 type=BACKUP priority=90
 [all:vars]
+lb_port=6443
 vip=172.16.100.200
 
 #本组内填写node服务器及主机名

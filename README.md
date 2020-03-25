@@ -48,6 +48,7 @@ systemctl start nginx
 172.16.100.198 hostname=haproxy-01 type=MASTER priority=100
 172.16.100.199 hostname=haproxy-02 type=BACKUP priority=90
 [all:vars]
+lb_port=6443
 vip=172.16.100.200
 
 #本组内填写node服务器及主机名
@@ -56,6 +57,8 @@ vip=172.16.100.200
 172.16.100.208 hostname=node-02
 172.16.100.209 hostname=node-03
 ```
+
+- 当haproxy和kube-apiserver部署在同一台服务器时，请将`lb_port`修改为其他不冲突的端口。
 
 
 
@@ -98,13 +101,15 @@ yum -y install ansible
 pip install netaddr
 ```
 
+
+
 #### 4.2、部署集群
 
 先执行格式化磁盘并挂载目录。如已经自行格式化磁盘并挂载，请跳过此步骤。
 
 ```
-ansible-playbook fdisk.yml -i inventory -l etcd -e "disk=/dev/sdb dir=/var/lib/etcd"
-ansible-playbook fdisk.yml -i inventory -l master,node -e "disk=/dev/sdb dir=/var/lib/docker"
+ansible-playbook fdisk.yml -i inventory -l etcd -e "disk=sdb dir=/var/lib/etcd"
+ansible-playbook fdisk.yml -i inventory -l master,node -e "disk=sdb dir=/var/lib/docker"
 ```
 安装k8s
 ```
@@ -119,6 +124,8 @@ ansible-playbook k8s.yml -i inventory --skip-tags=install_haproxy,install_keepal
 
 ⚠️：默认使用calico ipip网络，部署成功后，可以自行修改。
 
+
+
 #### 4.3、扩容mater节点
 
 扩容master前，请将{{ssl_dir}}目录中的kube-apiserver的证书备份并移除。
@@ -126,20 +133,24 @@ ansible-playbook k8s.yml -i inventory --skip-tags=install_haproxy,install_keepal
 扩容时，请不要在inventory文件master组中保留旧服务器信息。
 
 ```
-ansible-playbook fdisk.yml -i inventory -l master -e "disk=/dev/sdb dir=/var/lib/docker"
+ansible-playbook fdisk.yml -i inventory -l master -e "disk=sdb dir=/var/lib/docker"
 ansible-playbook k8s.yml -i inventory -l master -t init
 ansible-playbook k8s.yml -i inventory -l master -t cert,install_master,install_docker,install_node,install_ceph --skip-tags=bootstrap,cni
 ```
+
+
 
 #### 4.4、扩容node节点
 
 扩容时，请不要在inventory文件node组中保留旧服务器信息。
 
 ```
-ansible-playbook fdisk.yml -i inventory -l node -e "disk=/dev/sdb dir=/var/lib/docker"
+ansible-playbook fdisk.yml -i inventory -l node -e "disk=sdb dir=/var/lib/docker"
 ansible-playbook k8s.yml -i inventory -l node -t init
 ansible-playbook k8s.yml -i inventory -l node -t install_docker,install_node,install_ceph --skip-tags=create_label,cni
 ```
+
+
 
 #### 4.5、替换集群证书
 
@@ -185,6 +196,8 @@ ansible-playbook k8s.yml -i inventory -l master-01 -t restart_apiserver,restart_
 
 - 如calico、metrics-server等服务也使用了etcd，请记得一起更新相关证书。
 -  `-l`参数更换为具体节点IP
+
+
 
 #### 4.6、升级kubernetes版本
 

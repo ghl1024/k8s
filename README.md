@@ -17,8 +17,7 @@ wget https://storage.googleapis.com/kubernetes-release/release/v1.16.3/kubernete
 ```
 yum -y install nginx
 tar zxvf kubernetes-server-linux-amd64.tar.gz
-cd kubernetes/server/bin
-cp {kube-apiserver,kube-controller-manager,kube-scheduler,kubectl,kubelet,kube-proxy} /usr/share/nginx/html/
+cp kubernetes/server/bin/{kube-apiserver,kube-controller-manager,kube-scheduler,kubectl,kubelet,kube-proxy} /usr/share/nginx/html/
 ```
 
 ```
@@ -214,3 +213,4 @@ ansible-playbook k8s.yml -i inventory -l master-01 -t restart_apiserver,restart_
 ```
 
 - `-l`参数更换为具体节点IP
+
